@@ -1,0 +1,302 @@
+type Customer {
+  email: String!
+  id: Int!
+  name: String!
+}
+
+type Customeraddress {
+  addressid: Int!
+  customerid: Int!
+}
+
+type Lineitem {
+  orderid: Int!
+  productid: Int!
+  quantity: Int
+}
+
+type Order {
+  carrier: String
+  createdat: Date!
+  customerid: Int!
+  id: Int!
+  shippingcost: Float
+  trackingid: String
+}
+
+type Product {
+  description: String
+  id: Int!
+  image: String
+  title: String
+}
+
+"""
+The following queries are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Query {
+  " Queries for type 'Address' "
+  addressList: [Address]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "address"
+      configuration: "postgresql_config"
+    )
+  addressPaginatedList(first: Int, after: Int): [Address]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "city", "countryregion", "id", "postalcode", "stateprovince", "street" FROM "address" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Customer' "
+  customerList: [Customer]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "customer"
+      configuration: "postgresql_config"
+    )
+  customerPaginatedList(first: Int, after: Int): [Customer]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "email", "id", "name" FROM "customer" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Customeraddress' "
+  customeraddressList: [Customeraddress]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "customeraddress"
+      configuration: "postgresql_config"
+    )
+  customeraddressPaginatedList(first: Int, after: Int): [Customeraddress]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "addressid", "customerid" FROM "customeraddress" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Lineitem' "
+  lineitemList: [Lineitem]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "lineitem"
+      configuration: "postgresql_config"
+    )
+  lineitemPaginatedList(first: Int, after: Int): [Lineitem]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "orderid", "productid", "quantity" FROM "lineitem" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Order' "
+  orderByCustomerid(customerid: Int!): [Order]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "order"
+      configuration: "postgresql_config"
+    )
+  orderByCustomeridAndCarrier(customerid: Int!, carrier: String!): [Order]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "order"
+      configuration: "postgresql_config"
+    )
+  orderList: [Order]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "order"
+      configuration: "postgresql_config"
+    )
+  orderPaginatedList(first: Int, after: Int): [Order]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "carrier", "createdat", "customerid", "id", "shippingcost", "trackingid" FROM "order" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Product' "
+  productList: [Product]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "product"
+      configuration: "postgresql_config"
+    )
+  productPaginatedList(first: Int, after: Int): [Product]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "description", "id", "image", "title" FROM "product" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+"""
+The following mutations are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Mutation {
+  " Mutations for type 'Address' "
+  deleteAddress(
+    city: String!
+    id: Int!
+    stateprovince: String!
+    postalcode: String!
+    street: String!
+    countryregion: String!
+  ): Address
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "address"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertAddress(
+    city: String
+    id: Int!
+    stateprovince: String
+    postalcode: String
+    street: String
+    countryregion: String
+  ): Address
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "address"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Customer' "
+  deleteCustomer(name: String!, id: Int!, email: String!): Customer
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "customer"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertCustomer(name: String!, email: String!): Customer
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "customer"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Customeraddress' "
+  deleteCustomeraddress(addressid: Int!, customerid: Int!): Customeraddress
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "customeraddress"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertCustomeraddress(addressid: Int!, customerid: Int!): Customeraddress
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "customeraddress"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Lineitem' "
+  deleteLineitem(quantity: Int!, productid: Int!, orderid: Int!): Lineitem
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "lineitem"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertLineitem(quantity: Int, productid: Int!, orderid: Int!): Lineitem
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "lineitem"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Order' "
+  deleteOrder(
+    carrier: String!
+    customerid: Int!
+    id: Int!
+    shippingcost: Float!
+    trackingid: String!
+    createdat: Date!
+  ): Order
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "order"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertOrder(
+    carrier: String
+    customerid: Int!
+    id: Int!
+    shippingcost: Float
+    trackingid: String
+    createdat: Date!
+  ): Order
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "order"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Product' "
+  deleteProduct(
+    image: String!
+    description: String!
+    title: String!
+    id: Int!
+  ): Product
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "product"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertProduct(
+    image: String
+    description: String
+    title: String
+    id: Int!
+  ): Product
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "product"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+}
