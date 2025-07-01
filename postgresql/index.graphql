@@ -37,6 +37,16 @@ Feel free to modify them or aggregate more.
 """
 type Query {
   " Queries for type 'Address' "
+  getAddressByID(id: Int!): [Address]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query:
+      """
+      SELECT * FROM "address" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
   addressList: [Address]
     @dbquery(
       type: "postgresql"

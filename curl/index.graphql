@@ -1,9 +1,9 @@
 type Address {
   city: String
-  countryRegion: String
+  #countryRegion: String
   id: Int!
-  postalCode: String
-  stateProvince: String
+  #postalCode: String
+  #stateProvince: String
   street: String
   countryregion: String
   postalcode: String
@@ -20,7 +20,8 @@ type OrdersEntry {
 }
 
 type RootEntry {
-  address: Address
+  address: [Address]
+    @materializer(query: "getAddressById")
   email: String
   id: Int
   name: String
